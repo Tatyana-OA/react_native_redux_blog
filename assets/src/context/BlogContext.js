@@ -1,4 +1,5 @@
 import createDataContext from "./createDataContext";
+import jsonServer from "../api/jsonServer";
 
 //Create context
 //Add provider to the context
@@ -6,6 +7,8 @@ import createDataContext from "./createDataContext";
 
 const blogReducer = (state, action) => {
   switch (action.type) {
+    case "get_blogposts":
+      return action.payload;
     case "add_blogpost":
       return [
         ...state,
@@ -24,6 +27,13 @@ const blogReducer = (state, action) => {
     default:
       return state;
   }
+};
+
+const getBlogPosts = (dispatch) => {
+  return async () => {
+    const response = await jsonServer.get("/blogposts");
+    dispatch({ type: "get_blogposts", payload: response.data });
+  };
 };
 
 const addBlogPost = (dispatch) => {
